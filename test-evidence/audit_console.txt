@@ -1,0 +1,17 @@
+S1 Sign in                         axe violations: 0  undersized targets: 0
+S1 Wrong PIN error                 axe violations: 0  undersized targets: 0
+S2 My plans (empty)                axe violations: 0  undersized targets: 0
+S3 Find activity – results         axe violations: 0  undersized targets: 0
+S4 Activity detail                 axe violations: 0  undersized targets: 0
+S5 Plan editor                     axe violations: 0  undersized targets: 0
+S6 Validation error summary        axe violations: 0  undersized targets: 0
+S2 Offline – waiting for signal    axe violations: 0  undersized targets: 0
+S2 Sync failed with Retry          axe violations: 0  undersized targets: 0
+S2 Sent                            axe violations: 0  undersized targets: 0
+S7 Plan summary                    axe violations: 0  undersized targets: 0
+S2 Conflict flagged                axe violations: 0  undersized targets: 0
+S8 Choose a version                axe violations: 0  undersized targets: 0
+S7 Summary – dark mode             axe violations: 0  undersized targets: 0
+Reflow 320px: { viewport: 320, scrollWidth: 320 }
+Tab order: Fizzing volcano reaction – new session → Choose a version → Find an activity → My plans → Find activity → online
+Controls without 3px focus outline: 0

@@ -1,0 +1,18 @@
+flowchart LR
+  F["STEM facilitator<br/>(volunteer or teacher,<br/>shared low-spec phone)"]
+  O["Outreach unit staff<br/>(receive plans, edit content,<br/>set participant categories)"]
+  SM["School manager / assistant<br/>(reads printed A4 summary)"]
+  S(["STEMMate Namibia<br/>offline-first planning system"])
+  N["Mobile network<br/>(intermittent, costly data)"]
+  F -- "finds activities, plans sessions,<br/>records counts (no names)" --> S
+  S -- "status in words + icon,<br/>printable summary" --> F
+  S -- "completed plans (≤ 500 KB/request)" --> O
+  O -- "activity catalogue,<br/>interface labels (data files)" --> S
+  F -. "prints / shows summary" .-> SM
+  S <-. "only when signal exists" .-> N
+  classDef person fill:#DCEDEF,stroke:#0B5868,color:#16232E
+  classDef sys fill:#0B5868,stroke:#0B5868,color:#fff
+  classDef ext fill:#FBEBD9,stroke:#8A4609,color:#16232E
+  class F,O,SM person
+  class S sys
+  class N ext

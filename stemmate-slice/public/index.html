@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>STEMMate – vertical slice v1.3</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="stage">
+  <div class="phone">
+    <header class="appbar">
+      <strong>STEMMate</strong>
+      <span id="who" class="noprint"></span>
+    </header>
+    <div id="netbar" class="netbar" role="status"></div>
+    <main id="main"><p>Loading…</p></main>
+    <nav id="nav" class="nav" aria-label="Main"></nav>
+  </div>
+
+  <aside class="tools" aria-labelledby="tools-h">
+    <h2 id="tools-h">Test controls (not part of the app)</h2>
+    <p>Simulate low-resource conditions during evaluation. Server-side controls only work while the server runs with TEST_CONTROLS on.</p>
+    <fieldset>
+      <legend>Network</legend>
+      <label class="check"><input type="radio" name="net" value="online" id="net-on"> Online</label>
+      <label class="check"><input type="radio" name="net" value="offline" id="net-off"> Offline (simulated)</label>
+    </fieldset>
+    <div class="row">
+      <button class="btn sec small" id="t-fail" type="button">Server fails next 3 sends</button>
+      <button class="btn sec small" id="t-edit" type="button">Outreach unit edits my last sent plan</button>
+    </div>
+    <p id="t-msg" class="hint" aria-live="polite"></p>
+    <div class="row"><button class="btn sec small" id="reset" type="button">Reset this phone</button>
+    <button class="btn sec small" id="theme" type="button">Toggle dark mode</button></div>
+    <p class="vtag">Vertical slice v1.3 · synthetic data only</p>
+  </aside>
+</div>
+<div id="live" class="sr" aria-live="polite"></div>
+<script type="module" src="/src/ui.js"></script>
+</body>
+</html>

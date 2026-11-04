@@ -1,0 +1,55 @@
+erDiagram
+  FACILITATOR ||--o{ SESSION_PLAN : prepares
+  ACTIVITY ||--o{ SESSION_PLAN : "is basis for"
+  ACTIVITY }o--|{ MATERIAL : requires
+  SESSION_PLAN ||--|{ PLAN_STEP : contains
+  SESSION_PLAN ||--|{ PARTICIPATION_COUNT : records
+  SESSION_PLAN ||--o| SYNC_RECORD : "delivered by"
+  SESSION_PLAN ||--o| SERVER_PLAN : "copy held as"
+  FACILITATOR {
+    string id PK
+    string displayName
+    string pbkdf2Salt "device only"
+  }
+  ACTIVITY {
+    string id PK
+    string name
+    string topic
+    string level
+    int mins
+    string safety
+    string incl
+  }
+  SESSION_PLAN {
+    string id PK "p- + 12 chars, device-generated"
+    string act FK
+    string owner FK "device only, never sent"
+    string title
+    date date
+    string safety
+    string incl
+    enum state "DRAFT | COMPLETE"
+  }
+  PLAN_STEP {
+    int position
+    string t
+    int m "minutes > 0"
+  }
+  PARTICIPATION_COUNT {
+    string category "from catalogue"
+    int count "0-9999, no names"
+  }
+  SYNC_RECORD {
+    enum sync "6 states"
+    int baseRev
+    string editId "idempotency key"
+    int attempts "max 3"
+    datetime syncedAt
+  }
+  SERVER_PLAN {
+    string id PK
+    int rev
+    string lastEditId
+    string editedBy
+    datetime receivedAt
+  }

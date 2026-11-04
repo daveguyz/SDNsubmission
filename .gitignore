@@ -1,0 +1,4 @@
+node_modules/
+stemmate-slice/server/data/
+*.tmp
+~$*

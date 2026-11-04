@@ -1,0 +1,37 @@
+sequenceDiagram
+  autonumber
+  actor F as Facilitator
+  participant UI as UI (ui.js)
+  participant C as Core (core.js)
+  participant S as PlanStore
+  participant E as SyncEngine
+  participant API as Sync server
+  participant DB as plans.json
+  F->>UI: Mark complete and send
+  UI->>C: markComplete(plan)
+  alt missing date / safety / inclusion
+    C-->>UI: errors[]
+    UI-->>F: error summary, focus moved, fields marked invalid
+  else valid
+    C-->>UI: [] (state COMPLETE, sync PENDING, new editId)
+    UI->>S: put(plan) – encrypt + single write
+    UI->>E: runOnce()
+    alt no signal
+      E-->>UI: offline – stays "Waiting for signal"
+    else signal
+      E->>API: PUT /api/plans/id  If-Match: baseRev {plan, editId}
+      API->>C: validatePlan + field whitelist
+      alt same editId already stored
+        API-->>E: 200 {rev, replay:true} – no duplicate
+      else If-Match = current rev
+        API->>DB: write tmp, rename
+        API-->>E: 201/200 {rev}
+        E->>S: SYNCHRONISED, baseRev = rev
+        UI-->>F: "Sent to outreach unit hh:mm" + live announcement
+      else server copy changed
+        API-->>E: 412 {server copy}
+        E->>S: CONFLICT, keep both copies
+        UI-->>F: "Needs your choice" → Choose a version
+      end
+    end
+  end

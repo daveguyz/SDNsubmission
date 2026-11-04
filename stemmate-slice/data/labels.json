@@ -1,0 +1,10 @@
+{
+  "status": {
+    "NOT_QUEUED":   {"icon":"✎","text":"Draft – not sent","css":"c-draft"},
+    "PENDING":      {"icon":"⏳","text":"Waiting for signal","css":"c-pending"},
+    "SYNCING":      {"icon":"⇅","text":"Sending now","css":"c-syncing"},
+    "SYNCHRONISED": {"icon":"✓","text":"Sent to outreach unit","css":"c-synced"},
+    "FAILED":       {"icon":"✕","text":"Not sent – tap Retry","css":"c-failed"},
+    "CONFLICT":     {"icon":"⚑","text":"Needs your choice","css":"c-conflict"}
+  }
+}

@@ -1,0 +1,50 @@
+classDiagram
+  direction LR
+  class UI {
+    +render()
+    +kick()
+    -flushDraft()
+    -touch(plan, msg)
+  }
+  class Core {
+    +filterActivities(list, filter) Activity[]
+    +newPlan(activity, ownerId) SessionPlan
+    +validatePlan(plan) Error[]
+    +markComplete(plan) Error[]
+    +moveStep(plan, i, dir) bool
+    +toWire(plan) WirePlan
+  }
+  class PlanStore {
+    -key: CryptoKey
+    +unlock(pin)
+    +lock()
+    +list() SessionPlan[]
+    +put(plan)
+  }
+  class SyncEngine {
+    +runOnce() Result[]
+    +retry(id)
+    +keepLocal(id)
+    +useServer(id)
+  }
+  class HttpTransport {
+    +put(id, wire, baseRev, editId)
+  }
+  class SyncServer {
+    +PUT /api/plans/:id
+    +GET /api/plans/:id
+    +GET /api/catalogue
+  }
+  class FileDb {
+    +get(id)
+    +set(id, record)
+  }
+  UI --> Core
+  UI --> PlanStore
+  UI --> SyncEngine
+  SyncEngine --> PlanStore
+  SyncEngine --> HttpTransport
+  SyncEngine ..> Core : toWire
+  HttpTransport ..> SyncServer : HTTPS
+  SyncServer --> FileDb
+  SyncServer ..> Core : validatePlan

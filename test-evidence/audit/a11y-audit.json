@@ -1,0 +1,104 @@
+{
+  "date": "2026-11-04T10:56:18.623Z",
+  "chrome": "Chrome/156.0.8078.80",
+  "axe": "4.10.2",
+  "states": [
+    {
+      "name": "S1 Sign in",
+      "axeViolations": [],
+      "axePasses": 25,
+      "undersizedTargets": []
+    },
+    {
+      "name": "S1 Wrong PIN error",
+      "axeViolations": [],
+      "axePasses": 25,
+      "undersizedTargets": []
+    },
+    {
+      "name": "S2 My plans (empty)",
+      "axeViolations": [],
+      "axePasses": 23,
+      "undersizedTargets": []
+    },
+    {
+      "name": "S3 Find activity – results",
+      "axeViolations": [],
+      "axePasses": 26,
+      "undersizedTargets": []
+    },
+    {
+      "name": "S4 Activity detail",
+      "axeViolations": [],
+      "axePasses": 25,
+      "undersizedTargets": []
+    },
+    {
+      "name": "S5 Plan editor",
+      "axeViolations": [],
+      "axePasses": 25,
+      "undersizedTargets": []
+    },
+    {
+      "name": "S6 Validation error summary",
+      "axeViolations": [],
+      "axePasses": 25,
+      "undersizedTargets": []
+    },
+    {
+      "name": "S2 Offline – waiting for signal",
+      "axeViolations": [],
+      "axePasses": 26,
+      "undersizedTargets": []
+    },
+    {
+      "name": "S2 Sync failed with Retry",
+      "axeViolations": [],
+      "axePasses": 26,
+      "undersizedTargets": []
+    },
+    {
+      "name": "S2 Sent",
+      "axeViolations": [],
+      "axePasses": 26,
+      "undersizedTargets": []
+    },
+    {
+      "name": "S7 Plan summary",
+      "axeViolations": [],
+      "axePasses": 28,
+      "undersizedTargets": []
+    },
+    {
+      "name": "S2 Conflict flagged",
+      "axeViolations": [],
+      "axePasses": 27,
+      "undersizedTargets": []
+    },
+    {
+      "name": "S8 Choose a version",
+      "axeViolations": [],
+      "axePasses": 25,
+      "undersizedTargets": []
+    },
+    {
+      "name": "S7 Summary – dark mode",
+      "axeViolations": [],
+      "axePasses": 28,
+      "undersizedTargets": []
+    }
+  ],
+  "reflow": {
+    "viewport": 320,
+    "scrollWidth": 320
+  },
+  "tabOrder": [
+    "Fizzing volcano reaction – new session",
+    "Choose a version",
+    "Find an activity",
+    "My plans",
+    "Find activity",
+    "online"
+  ],
+  "focusVisible": []
+}

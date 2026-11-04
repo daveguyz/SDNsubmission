@@ -1,0 +1,30 @@
+flowchart TB
+  subgraph PHONE["Facilitator phone: browser web app"]
+    UI["UI layer<br/>src/ui.js<br/>screens S1–S8, live region"]
+    CORE["Domain core<br/>src/core.js<br/>filter, validation, plan rules"]
+    STORE["Encrypted plan store<br/>src/store.js<br/>AES-256-GCM, PBKDF2 key"]
+    SYNC["Sync engine<br/>src/sync.js<br/>conditional PUT, retry, conflict"]
+    SW["Service worker<br/>public/sw.js<br/>offline app shell"]
+    LS[("localStorage<br/>encrypted vault per facilitator")]
+    UI --> CORE
+    UI --> STORE
+    UI --> SYNC
+    SYNC --> CORE
+    SYNC --> STORE
+    STORE --> LS
+  end
+  subgraph SRV["Outreach-unit server: Node.js"]
+    API["Sync API<br/>server/server.js<br/>PUT /api/plans/:id (If-Match)"]
+    VAL["Shared validation<br/>imports src/core.js"]
+    DB[("plans.json<br/>atomic write-then-rename")]
+    DATA[("data/catalogue.json<br/>data/labels.json")]
+    API --> VAL
+    API --> DB
+    API --> DATA
+  end
+  SYNC -- "HTTPS JSON (TLS 1.3 in deployment)" --> API
+  SW -- "GET app shell and data files" --> API
+  classDef c fill:#DCEDEF,stroke:#0B5868,color:#16232E
+  classDef d fill:#FBEBD9,stroke:#8A4609,color:#16232E
+  class UI,CORE,STORE,SYNC,SW,API,VAL c
+  class LS,DB,DATA d

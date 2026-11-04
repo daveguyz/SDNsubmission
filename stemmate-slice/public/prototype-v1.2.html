@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>STEMMate Namibia – Prototype v1.2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E6ECEB; --surface:#FFFFFF; --ink:#16232E; --muted:#4A5A66; --line:#B9C6CA;
+  --teal:#0B5868; --teal-ink:#FFFFFF; --teal-soft:#DCEDEF;
+  --ochre:#8A4609; --ochre-soft:#FBEBD9; --green:#1C6436; --green-soft:#DDF0E3;
+  --red:#A11F16; --red-soft:#FBE3E1; --focus:#1A4FD6;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F171C; --surface:#18232A; --ink:#EAF1F2; --muted:#AAB9BF; --line:#3B4C55;
+  --teal:#7FD0DE; --teal-ink:#0B2229; --teal-soft:#1B3840; --ochre:#F2B677; --ochre-soft:#3A2913;
+  --green:#8BD9A5; --green-soft:#16301F; --red:#FF9C93; --red-soft:#3D1A17; --focus:#9DB8FF;}}
+:root[data-theme="dark"]{--bg:#0F171C; --surface:#18232A; --ink:#EAF1F2; --muted:#AAB9BF; --line:#3B4C55;
+  --teal:#7FD0DE; --teal-ink:#0B2229; --teal-soft:#1B3840; --ochre:#F2B677; --ochre-soft:#3A2913;
+  --green:#8BD9A5; --green-soft:#16301F; --red:#FF9C93; --red-soft:#3D1A17; --focus:#9DB8FF;}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:1.0625rem/1.55 "Atkinson Hyperlegible",Verdana,"Segoe UI",sans-serif}
+a{color:var(--teal)}
+.back{display:inline-flex;align-items:center;min-height:44px;font-weight:700}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--surface);padding:.6rem 1rem;z-index:10}
+.skip:focus{left:.5rem;top:.5rem}
+.stage{display:flex;gap:2rem;justify-content:center;align-items:flex-start;padding:1.5rem 1rem;flex-wrap:wrap}
+.phone{width:100%;max-width:410px;background:var(--surface);border:2px solid var(--line);border-radius:28px;overflow:hidden;min-height:720px;display:flex;flex-direction:column}
+.appbar{background:var(--teal);color:var(--teal-ink);padding:.75rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.appbar strong{font-size:1.15rem;letter-spacing:.01em}
+.appbar button{background:transparent;color:var(--teal-ink);border:2px solid currentColor;border-radius:8px;min-height:44px;padding:0 .8rem;font:inherit;font-size:.95rem;cursor:pointer}
+.netbar{padding:.55rem 1rem;font-size:.95rem;display:flex;gap:.5rem;align-items:center;border-bottom:1px solid var(--line)}
+.netbar.off{background:var(--ochre-soft);color:var(--ochre)}
+.netbar.on{background:var(--green-soft);color:var(--green)}
+main{padding:1rem 1.1rem 1.5rem;flex:1}
+h1{font-size:1.5rem;line-height:1.2;margin:.2rem 0 .8rem}
+h2{font-size:1.15rem;margin:1.4rem 0 .5rem}
+h1:focus{outline:none}
+p{margin:.4rem 0 .8rem}
+.muted{color:var(--muted)}
+label,.lbl{display:block;font-weight:700;margin:.9rem 0 .3rem}
+.hint{display:block;color:var(--muted);font-size:.93rem;margin:-.15rem 0 .35rem;font-weight:400}
+input[type=text],input[type=number],input[type=password],input[type=date],select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--surface);border:2px solid var(--muted);border-radius:8px;padding:.55rem .65rem;min-height:44px}
+textarea{min-height:5.5rem;resize:vertical}
+[aria-invalid=true]{border-color:var(--red)!important;border-width:3px!important}
+.err{color:var(--red);font-weight:700;font-size:.95rem;margin:.3rem 0}
+.err::before{content:"⚠ ";}
+fieldset{border:2px solid var(--line);border-radius:10px;margin:1rem 0;padding:.4rem .9rem .8rem}
+legend{font-weight:700;padding:0 .3rem}
+.check{display:flex;align-items:center;gap:.6rem;min-height:44px;font-weight:400;margin:0}
+.check input{width:26px;height:26px;flex:none;accent-color:var(--teal)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 .3rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;min-height:48px;padding:.5rem 1.1rem;border-radius:10px;border:2px solid var(--teal);background:var(--teal);color:var(--teal-ink);font:inherit;font-weight:700;cursor:pointer;text-decoration:none}
+.btn.sec{background:transparent;color:var(--teal)}
+.btn.small{min-height:44px;padding:.3rem .7rem;font-size:.95rem;font-weight:700}
+.btn.danger{border-color:var(--red);color:var(--red);background:transparent}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;margin:1rem 0}
+.list{list-style:none;padding:0;margin:0}
+.item{border:2px solid var(--line);border-radius:12px;padding:.8rem .9rem;margin:.7rem 0}
+.item h3{margin:0 0 .2rem;font-size:1.08rem}
+.meta{color:var(--muted);font-size:.95rem;margin:0}
+.chip{display:inline-flex;align-items:center;gap:.35rem;border-radius:999px;padding:.15rem .7rem;font-size:.92rem;font-weight:700;border:2px solid currentColor;white-space:nowrap}
+.c-draft{color:var(--muted)} .c-pending{color:var(--ochre);background:var(--ochre-soft)}
+.c-syncing{color:var(--teal);background:var(--teal-soft)} .c-synced{color:var(--green);background:var(--green-soft)}
+.c-failed{color:var(--red);background:var(--red-soft)} .c-conflict{color:var(--red);background:var(--red-soft)}
+.c-ondevice{color:var(--green);background:var(--green-soft)} .c-download{color:var(--muted)}
+.notice{border-left:6px solid var(--teal);background:var(--teal-soft);padding:.7rem .9rem;border-radius:6px;margin:.8rem 0}
+.notice.warn{border-color:var(--ochre);background:var(--ochre-soft)}
+.notice.bad{border-color:var(--red);background:var(--red-soft)}
+.notice.good{border-color:var(--green);background:var(--green-soft)}
+.errsum{border:3px solid var(--red);border-radius:10px;padding:.7rem 1rem;margin:1rem 0;background:var(--red-soft)}
+.errsum h2{margin:.1rem 0 .4rem;color:var(--red)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+.step{border:2px solid var(--line);border-radius:10px;padding:.6rem .7rem;margin:.5rem 0}
+.step-top{display:flex;gap:.5rem;align-items:baseline}
+.step-n{font-weight:700;min-width:1.6rem}
+.step-actions{display:flex;gap:.4rem;margin-top:.45rem;flex-wrap:wrap}
+.progress{height:12px;border:2px solid var(--teal);border-radius:8px;overflow:hidden;margin:.6rem 0}
+.progress>span{display:block;height:100%;background:var(--teal);width:0;transition:width .25s linear}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+.ver{border:2px solid var(--line);border-radius:10px;padding:.6rem;font-size:.95rem}
+.ver h3{font-size:1rem;margin:0 0 .3rem}
+.changed{font-weight:700;color:var(--ochre)}
+.changed::before{content:"CHANGED: ";}
+.autosave{font-size:.92rem;color:var(--muted);min-height:1.4em}
+.nav{display:flex;border-top:2px solid var(--line)}
+.nav a{flex:1;text-align:center;padding:.7rem .3rem;min-height:56px;text-decoration:none;color:var(--ink);font-weight:700;font-size:.95rem}
+.nav a[aria-current=page]{color:var(--teal);box-shadow:inset 0 4px 0 var(--teal)}
+.tools{width:100%;max-width:330px;background:var(--surface);border:2px dashed var(--muted);border-radius:14px;padding:1rem 1.1rem}
+.tools h2{margin-top:0;font-size:1.05rem}
+.tools p{font-size:.93rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.vtag{font-size:.85rem;color:var(--muted);text-align:center;margin:.6rem 0 0}
+@media (max-width:440px){.stage{padding:0;gap:1rem}.phone{border-radius:0;border-left:0;border-right:0;min-height:100vh}.cols{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media print{.tools,.appbar,.netbar,.nav,.noprint{display:none!important}.phone{border:0;max-width:none}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="stage">
+  <div class="phone">
+    <header class="appbar">
+      <strong>STEMMate</strong>
+      <span id="who" class="noprint"></span>
+    </header>
+    <div id="netbar" class="netbar" role="status"></div>
+    <main id="main"></main>
+    <nav id="nav" class="nav" aria-label="Main"></nav>
+  </div>
+
+  <aside class="tools" aria-labelledby="tools-h">
+    <h2 id="tools-h">Test controls (not part of the app)</h2>
+    <p>Use these to simulate low-resource conditions during evaluation sessions.</p>
+    <fieldset>
+      <legend>Network</legend>
+      <label class="check"><input type="radio" name="net" value="online" id="net-on"> Online</label>
+      <label class="check"><input type="radio" name="net" value="offline" id="net-off"> Offline</label>
+    </fieldset>
+    <fieldset>
+      <legend>Inject a failure</legend>
+      <label class="check"><input type="checkbox" id="f-download"> Drop connection during next download</label>
+      <label class="check"><input type="checkbox" id="f-server"> Server error on next sync (×3)</label>
+      <label class="check"><input type="checkbox" id="f-conflict"> Outreach unit edits a plan (conflict)</label>
+    </fieldset>
+    <div class="row"><button class="btn sec small" id="reset" type="button">Reset demo data</button>
+    <button class="btn sec small" id="theme" type="button">Toggle dark mode</button></div>
+    <p class="vtag">Version v1.2 · synthetic data only</p>
+  </aside>
+</div>
+<div id="live" class="sr" aria-live="polite"></div>
+
+<script>
+/* ---------- Synthetic data ---------- */
+const MATERIALS=["Plastic bottles","String","Balloons","Straws","Tape","Cardboard","Coins","Water","Vinegar","Baking soda","Rulers","Paper cups","Torch","Mirrors","Sand"];
+const ACTIVITIES=[
+ {id:"a1",name:"Balloon rocket races",topic:"Physics",level:"Grade 4–7",mins:40,mat:["Balloons","String","Straws","Tape"],steps:[["Thread string through a straw and tie it across the room",8],["Tape an inflated balloon to the straw",7],["Release and measure distance travelled",15],["Discuss: why does air push the balloon forward?",10]],safety:"Check for latex allergies before handing out balloons. Keep string away from walkways.",incl:"Pair learners so each pair has one person measuring and one releasing; swap roles."},
+ {id:"a2",name:"Desert water filter",topic:"Environmental science",level:"Grade 6–9",mins:60,mat:["Plastic bottles","Sand","Paper cups","Water"],steps:[["Cut bottles and layer sand and cloth",15],["Pour muddy water through the filter",15],["Compare clarity of before and after",15],["Discuss why filtered water is still not safe to drink",15]],safety:"Adults cut the bottles. Filtered water must not be drunk.",incl:"Offer a picture card of each layer for learners who prefer visual instructions."},
+ {id:"a3",name:"Fizzing volcano reaction",topic:"Chemistry",level:"Grade 4–7",mins:30,mat:["Vinegar","Baking soda","Paper cups"],steps:[["Predict what will happen",5],["Add baking soda to the cup",5],["Pour in vinegar and observe",10],["Explain acid–base reactions in simple words",10]],safety:"Use eye protection or keep faces back. Wipe spills immediately.",incl:"Let learners describe the reaction in any home language first."},
+ {id:"a4",name:"Shadow sundial",topic:"Earth science",level:"Grade 3–5",mins:45,mat:["Cardboard","Rulers","Sand"],steps:[["Stand a stick upright in sand on cardboard",10],["Mark the shadow every 10 minutes",25],["Discuss how the sun moves across the sky",10]],safety:"Never look directly at the sun.",incl:"Learners who cannot go outside can track a torch shadow indoors."},
+ {id:"a5",name:"Coin boat challenge",topic:"Physics",level:"Grade 5–8",mins:50,mat:["Cardboard","Tape","Water","Coins"],steps:[["Build a small boat from card and tape",20],["Float it and add coins one by one",20],["Compare designs that carried the most",10]],safety:"Keep water away from electrical sockets. Small coins are a choking risk for young children.",incl:"Mixed groups; each member must add at least one design idea."},
+ {id:"a6",name:"Mirror light maze",topic:"Physics",level:"Grade 7–10",mins:45,mat:["Mirrors","Torch","Cardboard","Tape"],steps:[["Set up a cardboard maze",15],["Angle mirrors to guide torch light to the exit",20],["Record the angles that worked",10]],safety:"Mirror edges can be sharp; tape the edges.",incl:"Read angles aloud for learners with low vision."},
+ {id:"a7",name:"Paper cup telephone",topic:"Physics",level:"Grade 3–5",mins:30,mat:["Paper cups","String"],steps:[["Make a hole in each cup and thread string",10],["Talk through the cups with the string tight",10],["Try with slack string and compare",10]],safety:"Pencils used to pierce cups are handled by adults.",incl:"Learners with hearing difficulties can feel the vibration by touching the string."},
+ {id:"a8",name:"Straw bridge build",topic:"Engineering",level:"Grade 6–9",mins:60,mat:["Straws","Tape","Coins","Rulers"],steps:[["Plan a bridge spanning 20 cm",10],["Build with straws and tape",30],["Load with coins until it fails",15],["Reflect on strongest shapes",5]],safety:"None beyond normal classroom care.",incl:"Assign roles: designer, builder, tester, recorder."}
+];
+const CATS=["Ages 6–9","Ages 10–13","Ages 14–17","Adults present"];
+const FACS=[{id:"f1",name:"Selma (demo)",pin:"1234"},{id:"f2",name:"Johannes (demo)",pin:"5678"}];
+
+function freshState(){return{
+  net:"online",user:null,onDevice:["a3"],
+  fail:{download:false,server:0,conflict:false},
+  plans:[
+   {id:"p-7f3a",owner:"f1",act:"a3",title:"Fizzing volcano – Okahandja Primary",date:"2026-10-12",steps:ACTIVITIES[2].steps.map(s=>({t:s[0],m:s[1]})),safety:ACTIVITIES[2].safety,incl:ACTIVITIES[2].incl,counts:[14,9,0,2],state:"COMPLETE",sync:"SYNCHRONISED",syncedAt:"09:41",rev:3,server:null,attempts:0},
+   {id:"p-2c91",owner:"f1",act:"a3",title:"Volcano repeat – Saturday club",date:"2026-10-17",steps:ACTIVITIES[2].steps.map(s=>({t:s[0],m:s[1]})),safety:"",incl:"",counts:[0,0,0,0],state:"DRAFT",sync:"NOT_QUEUED",rev:0,server:null,attempts:0},
+   {id:"p-55be",owner:"f2",act:"a3",title:"Johannes's private draft",date:"2026-10-20",steps:[{t:"Intro",m:5}],safety:"",incl:"",counts:[0,0,0,0],state:"DRAFT",sync:"NOT_QUEUED",rev:0,server:null,attempts:0}
+  ]};}
+let S;
+try{S=JSON.parse(localStorage.getItem("stemmate-v12"))||freshState();}catch(e){S=freshState();}
+function save(){try{localStorage.setItem("stemmate-v12",JSON.stringify(S));}catch(e){}}
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const act=id=>ACTIVITIES.find(a=>a.id===id);
+const plan=id=>S.plans.find(p=>p.id===id);
+const now=()=>new Date().toTimeString().slice(0,5);
+function say(msg){const l=$("#live");l.textContent="";setTimeout(()=>l.textContent=msg,60);}
+const STATUS={NOT_QUEUED:["c-draft","✎","Draft"],PENDING:["c-pending","⏳","Pending – waiting to send"],SYNCING:["c-syncing","⇅","Syncing"],SYNCHRONISED:["c-synced","✓","Synced"],FAILED:["c-failed","✕","Sync failed"],CONFLICT:["c-conflict","⚑","Conflict – choose a version"]};
+function chip(p){const[c,i,t]=STATUS[p.sync];return `<span class="chip ${c}"><span aria-hidden="true">${i}</span>${t}${p.sync==="SYNCHRONISED"&&p.syncedAt?" "+p.syncedAt:""}</span>`;}
+function myPlans(){return S.plans.filter(p=>p.owner===S.user);}
+
+/* ---------- network bar & nav ---------- */
+function renderChrome(route){
+  const q=S.user?myPlans().filter(p=>["PENDING","FAILED"].includes(p.sync)).length:0;
+  const nb=$("#netbar");
+  if(S.net==="offline"){nb.className="netbar off";nb.innerHTML=`<span aria-hidden="true">⚠</span><span><strong>Offline.</strong> Saved activities and plans still work.${q?` ${q} plan${q>1?"s":""} waiting to send.`:""}</span>`;}
+  else{nb.className="netbar on";nb.innerHTML=`<span aria-hidden="true">●</span><span><strong>Online.</strong>${q?` Sending ${q} plan${q>1?"s":""}…`:" All work is up to date."}</span>`;}
+  $("#who").innerHTML=S.user?`<button type="button" id="signout">Sign out</button>`:"";
+  if(S.user){$("#signout").onclick=()=>{S.user=null;save();say("Signed out. Your drafts are locked on this phone.");go("#signin");};}
+  const items=[["#plans","My plans"],["#catalogue","Find activity"]];
+  $("#nav").innerHTML=S.user?items.map(([h,t])=>`<a href="${h}" ${route===h.slice(1)?'aria-current="page"':""}>${t}</a>`).join(""):"";
+  $("#net-on").checked=S.net==="online";$("#net-off").checked=S.net==="offline";
+  $("#f-download").checked=S.fail.download;$("#f-server").checked=S.fail.server>0;$("#f-conflict").checked=S.fail.conflict;
+}
+
+/* ---------- router ---------- */
+function go(h){if(location.hash===h)render();else location.hash=h;}
+window.addEventListener("hashchange",render);
+function render(){
+  let [route,arg]=location.hash.slice(1).split("/");
+  if(!S.user&&route!=="signin")route="signin";
+  if(S.user&&(!route||route==="signin"))route="plans";
+  const V={signin,plans:plansView,catalogue,activity,edit,summary,conflict}[route]||plansView;
+  $("#main").innerHTML="";V(arg);renderChrome(route);
+  const h=$("#main h1");if(h){h.tabIndex=-1;h.focus();document.title=h.textContent+" – STEMMate prototype";}
+}
+
+/* ---------- screens ---------- */
+function signin(){
+  $("#main").innerHTML=`<h1>Sign in</h1>
+  <p class="muted">This phone may be shared. Each facilitator's drafts are locked to their own PIN.</p>
+  <form id="f" novalidate>
+   <label for="fac">Facilitator</label>
+   <select id="fac">${FACS.map(f=>`<option value="${f.id}">${f.name}</option>`).join("")}</select>
+   <label for="pin">PIN <span class="hint">4 digits. Demo PINs: Selma 1234, Johannes 5678.</span></label>
+   <input id="pin" type="password" inputmode="numeric" autocomplete="off" aria-describedby="pin-err">
+   <div id="pin-err"></div>
+   <div class="row"><button class="btn" type="submit">Sign in</button></div>
+  </form>`;
+  $("#f").onsubmit=e=>{e.preventDefault();const f=FACS.find(x=>x.id===$("#fac").value);
+    if($("#pin").value!==f.pin){$("#pin").setAttribute("aria-invalid","true");$("#pin-err").innerHTML=`<p class="err">That PIN does not match ${esc(f.name)}. Check the PIN and try again.</p>`;$("#pin").focus();return;}
+    S.user=f.id;save();say("Signed in as "+f.name);go("#plans");kick();};
+}
+
+function plansView(){
+  const ps=myPlans();
+  $("#main").innerHTML=`<h1>My plans</h1>
+  ${ps.length?`<ul class="list">${ps.map(p=>`<li class="item"><h3><a href="#${p.sync==="CONFLICT"?"conflict":(p.state==="DRAFT"?"edit":"summary")}/${p.id}">${esc(p.title)}</a></h3>
+   <p class="meta">${esc(act(p.act).name)} · ${esc(p.date)}</p><p style="margin:.4rem 0 0">${chip(p)}</p>
+   ${p.sync==="FAILED"?`<p class="err">Couldn't send this plan after 3 tries.</p><button class="btn small" data-retry="${p.id}" type="button">Retry sending</button>`:""}
+   ${p.sync==="CONFLICT"?`<p class="meta">The outreach unit changed this plan. Nothing has been overwritten.</p>`:""}
+  </li>`).join("")}</ul>`:`<p>You have no plans yet. Start by finding an activity that fits the materials you have.</p>`}
+  <div class="row"><a class="btn" href="#catalogue">Find an activity</a></div>`;
+  document.querySelectorAll("[data-retry]").forEach(b=>b.onclick=()=>{const p=plan(b.dataset.retry);p.sync="PENDING";p.attempts=0;save();say("Retry queued. It will send when you're online.");render();kick();});
+}
+
+let lastFilter={level:"",mins:"",topic:"",mat:[]};
+function catalogue(){
+  const lv=[...new Set(ACTIVITIES.map(a=>a.level))],tp=[...new Set(ACTIVITIES.map(a=>a.topic))];
+  $("#main").innerHTML=`<h1>Find an activity</h1>
+  <p class="muted">Tick the materials you have. Only activities you can run with them are shown.</p>
+  <form id="ff">
+   <fieldset><legend>Materials on hand</legend><div class="grid2">${MATERIALS.map((m,i)=>`<label class="check"><input type="checkbox" name="m" value="${m}" ${lastFilter.mat.includes(m)?"checked":""}> ${m}</label>`).join("")}</div></fieldset>
+   <label for="lv">Learner level</label><select id="lv"><option value="">Any level</option>${lv.map(l=>`<option ${lastFilter.level===l?"selected":""}>${l}</option>`).join("")}</select>
+   <label for="tp">Topic</label><select id="tp"><option value="">Any topic</option>${tp.map(t=>`<option ${lastFilter.topic===t?"selected":""}>${t}</option>`).join("")}</select>
+   <label for="mn">Longest session (minutes)</label><select id="mn"><option value="">Any length</option>${[30,45,60].map(n=>`<option value="${n}" ${lastFilter.mins==n?"selected":""}>Up to ${n} minutes</option>`).join("")}</select>
+   <div class="row"><button class="btn" type="submit">Show activities</button></div>
+  </form>
+  <h2 id="res-h">Results</h2><div id="res"></div>`;
+  const show=()=>{const L=lastFilter;
+    const r=ACTIVITIES.filter(a=>(!L.level||a.level===L.level)&&(!L.topic||a.topic===L.topic)&&(!L.mins||a.mins<=+L.mins)&&(L.mat.length===0||a.mat.every(m=>L.mat.includes(m))));
+    $("#res").innerHTML=`<p id="rc"><strong>${r.length} activit${r.length===1?"y":"ies"}</strong> match${r.length===1?"es":""}.</p>`+(r.length?`<ul class="list">${r.map(a=>`<li class="item"><h3><a href="#activity/${a.id}">${a.name}</a></h3><p class="meta">${a.topic} · ${a.level} · ${a.mins} min</p><p class="meta">Needs: ${a.mat.join(", ")}</p>
+     <p style="margin:.4rem 0 0">${S.onDevice.includes(a.id)?`<span class="chip c-ondevice"><span aria-hidden="true">✓</span>Saved on this phone</span>`:`<span class="chip c-download"><span aria-hidden="true">↓</span>Download needed</span>`}</p></li>`).join("")}</ul>`:`<p>Try unticking a filter, or add a material you could borrow.</p>`);
+    return r.length;};
+  show();
+  $("#ff").onsubmit=e=>{e.preventDefault();lastFilter={level:$("#lv").value,topic:$("#tp").value,mins:$("#mn").value,mat:[...document.querySelectorAll("[name=m]:checked")].map(x=>x.value)};const n=show();say(n+" activities match.");$("#rc").tabIndex=-1;$("#rc").focus();};
+}
+
+function activity(id){
+  const a=act(id);if(!a)return go("#catalogue");
+  const on=S.onDevice.includes(id);
+  $("#main").innerHTML=`<p><a class="back" href="#catalogue">Back to results</a></p><h1>${a.name}</h1>
+  <p class="meta">${a.topic} · ${a.level} · ${a.mins} min</p>
+  <div id="savebox">${on?`<p><span class="chip c-ondevice"><span aria-hidden="true">✓</span>Saved on this phone</span></p>`:`<div class="row"><button class="btn sec" id="dl" type="button">Save for offline use</button></div>`}</div>
+  <h2>Materials</h2><ul>${a.mat.map(m=>`<li>${m}</li>`).join("")}</ul>
+  ${on?`<h2>Steps</h2><ol>${a.steps.map(s=>`<li>${s[0]} (${s[1]} min)</li>`).join("")}</ol>
+  <h2>Safety</h2><div class="notice warn"><span aria-hidden="true">⚠ </span>${a.safety}</div>
+  <h2>Inclusion prompt</h2><p>${a.incl}</p>`:`<div class="notice">Full steps and safety notes appear once the activity is saved on this phone.</div>`}
+  <div class="row"><button class="btn" id="mk" type="button" ${on?"":"disabled aria-describedby=\"mk-why\""}>Plan a session with this</button></div>
+  ${on?"":`<p id="mk-why" class="hint">Save the activity first so the plan works offline.</p>`}`;
+  if(!on)$("#dl").onclick=()=>download(a);
+  $("#mk").onclick=()=>{if(!on)return;const id="p-"+Math.random().toString(16).slice(2,6);
+    S.plans.unshift({id,owner:S.user,act:a.id,title:a.name+" – new session",date:"",steps:a.steps.map(s=>({t:s[0],m:s[1]})),safety:a.safety,incl:"",counts:[0,0,0,0],state:"DRAFT",sync:"NOT_QUEUED",rev:0,server:null,attempts:0});save();go("#edit/"+id);};
+}
+function download(a){
+  const box=$("#savebox");
+  if(S.net==="offline"){box.innerHTML=`<div class="notice warn" role="alert"><strong>You're offline.</strong> This activity needs signal once to save (about 180 KB). Browsing saved activities still works.</div><div class="row"><button class="btn sec" id="dl" type="button">Try again</button></div>`;$("#dl").onclick=()=>download(a);return;}
+  box.innerHTML=`<p id="dlmsg">Saving ${a.name}… (about 180 KB)</p><div class="progress" role="progressbar" aria-labelledby="dlmsg" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>`;
+  const bar=box.querySelector(".progress"),fill=bar.firstElementChild;let pc=0;
+  const t=setInterval(()=>{pc+=20;fill.style.width=pc+"%";bar.setAttribute("aria-valuenow",pc);
+    if(S.fail.download&&pc>=60){clearInterval(t);S.fail.download=false;save();renderChrome();
+      box.innerHTML=`<div class="notice bad" role="alert"><strong>Download stopped – connection lost.</strong> Nothing was half-saved. You can keep browsing and try again when signal is better.</div><div class="row"><button class="btn" id="retry" type="button">Retry download</button><button class="btn sec" id="cancel" type="button">Cancel</button></div>`;
+      $("#retry").onclick=()=>download(a);$("#cancel").onclick=()=>{box.innerHTML=`<p><span class="chip c-download"><span aria-hidden="true">↓</span>Download needed</span></p><div class="row"><button class="btn sec" id="dl" type="button">Save for offline use</button></div>`;$("#dl").onclick=()=>download(a);$("#dl").focus();};
+      $("#retry").focus();return;}
+    if(pc>=100){clearInterval(t);S.onDevice.push(a.id);save();say(a.name+" saved on this phone. It now works offline.");render();}
+  },300);
+}
+
+let typingTimer=null;
+function edit(id){
+  const p=plan(id);if(!p||p.owner!==S.user)return go("#plans");
+  if(p.state!=="DRAFT")return go("#summary/"+id);
+  const a=act(p.act);
+  $("#main").innerHTML=`<p><a class="back" href="#plans">Back to my plans</a></p><h1>Edit plan</h1>
+  <p>${chip(p)} <span class="autosave" id="as" aria-live="polite"></span></p>
+  <div id="es"></div>
+  <label for="t">Plan name</label><input id="t" type="text" value="${esc(p.title)}">
+  <label for="d">Session date</label><input id="d" type="date" value="${esc(p.date)}" aria-describedby="d-err"><div id="d-err"></div>
+  <h2 id="steps-h">Steps</h2>
+  <p class="hint">Use Up and Down to change the order. Total: <strong id="tot"></strong> minutes (activity guide: ${a.mins}).</p>
+  <ol class="steps" id="steps" aria-labelledby="steps-h"></ol>
+  <fieldset><legend>Add a step</legend>
+   <label for="ns">What happens</label><input id="ns" type="text">
+   <label for="nm">Minutes</label><input id="nm" type="number" min="1" max="120" inputmode="numeric">
+   <div id="ns-err"></div>
+   <div class="row"><button class="btn sec small" id="add" type="button">Add step</button></div>
+  </fieldset>
+  <label for="sf">Safety notes <span class="hint">Required. What must adults check before and during the session?</span></label>
+  <textarea id="sf" aria-describedby="sf-err">${esc(p.safety)}</textarea><div id="sf-err"></div>
+  <label for="ic">Inclusion prompt <span class="hint">Required. How will every learner take part?</span></label>
+  <textarea id="ic" aria-describedby="ic-err">${esc(p.incl)}</textarea><div id="ic-err"></div>
+  <fieldset><legend>Participation (numbers only, no names)</legend>
+   <p class="hint">Fill in after the session. Leave at 0 before it runs.</p>
+   ${CATS.map((c,i)=>`<label for="c${i}">${c}</label><input id="c${i}" type="number" min="0" inputmode="numeric" value="${p.counts[i]}">`).join("")}
+  </fieldset>
+  <div class="row"><a class="btn sec" href="#summary/${p.id}">View summary</a><button class="btn" id="done" type="button">Mark complete</button></div>`;
+  const drawSteps=(focusSel)=>{
+    $("#steps").innerHTML=p.steps.map((s,i)=>`<li class="step"><div class="step-top"><span class="step-n">${i+1}.</span><span>${esc(s.t)} <span class="muted">(${s.m} min)</span></span></div>
+     <div class="step-actions"><button class="btn sec small" type="button" data-up="${i}" ${i===0?"disabled":""} aria-label="Move step ${i+1} up">Up</button>
+     <button class="btn sec small" type="button" data-dn="${i}" ${i===p.steps.length-1?"disabled":""} aria-label="Move step ${i+1} down">Down</button>
+     <button class="btn danger small" type="button" data-rm="${i}" aria-label="Remove step ${i+1}">Remove</button></div></li>`).join("");
+    $("#tot").textContent=p.steps.reduce((x,s)=>x+ +s.m,0);
+    $("#steps").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+      if(b.dataset.up){const i=+b.dataset.up;[p.steps[i-1],p.steps[i]]=[p.steps[i],p.steps[i-1]];commit(`Step moved to position ${i}.`);drawSteps(`[data-up="${i-1}"]`);}
+      if(b.dataset.dn){const i=+b.dataset.dn;[p.steps[i+1],p.steps[i]]=[p.steps[i],p.steps[i+1]];commit(`Step moved to position ${i+2}.`);drawSteps(`[data-dn="${i+1}"]`);}
+      if(b.dataset.rm){const i=+b.dataset.rm;const t=p.steps[i].t;p.steps.splice(i,1);commit(`Removed step: ${t}.`);drawSteps();$("#steps-h").focus();}
+    });
+    if(focusSel){let f=$("#steps "+focusSel);if(!f||f.disabled)f=$("#steps button:not([disabled])");f&&f.focus();}
+  };
+  $("#steps-h").tabIndex=-1;drawSteps();
+  const commit=(msg)=>{p.title=$("#t").value;p.date=$("#d").value;p.safety=$("#sf").value;p.incl=$("#ic").value;p.counts=CATS.map((_,i)=>Math.max(0,parseInt($("#c"+i).value)||0));p.rev++;save();
+    $("#as").textContent=`Draft saved on this phone at ${now()}`;if(msg)say(msg+" Draft saved.");};
+  ["#t","#d","#sf","#ic",...CATS.map((_,i)=>"#c"+i)].forEach(s=>{$(s).addEventListener("change",()=>commit());$(s).addEventListener("input",()=>{clearTimeout(typingTimer);typingTimer=setTimeout(()=>commit(),2000);});});
+  $("#add").onclick=()=>{const t=$("#ns").value.trim(),m=parseInt($("#nm").value);
+    if(!t||!(m>0)){$("#ns-err").innerHTML=`<p class="err">Enter what happens and a number of minutes above 0.</p>`;(!t?$("#ns"):$("#nm")).focus();return;}
+    $("#ns-err").innerHTML="";p.steps.push({t,m});$("#ns").value="";$("#nm").value="";commit(`Step ${p.steps.length} added.`);drawSteps();$("#ns").focus();};
+  $("#done").onclick=()=>{commit();const miss=[];
+    ["#d","#sf","#ic"].forEach(s=>{$(s).removeAttribute("aria-invalid");$(s+"-err").innerHTML="";});
+    if(!p.date)miss.push(["#d","Add the session date."]);
+    if(p.steps.length===0)miss.push(["#ns","Add at least one step."]);
+    if(!p.safety.trim())miss.push(["#sf","Write the safety notes."]);
+    if(!p.incl.trim())miss.push(["#ic","Write an inclusion prompt."]);
+    if(miss.length){miss.forEach(([s,m])=>{const el=$(s);el.setAttribute("aria-invalid","true");const e=$(s+"-err");if(e)e.innerHTML=`<p class="err">${m}</p>`;});
+      $("#es").innerHTML=`<div class="errsum" role="alert" tabindex="-1" id="esb"><h2>Finish ${miss.length} thing${miss.length>1?"s":""} before marking complete</h2><ul>${miss.map(([s,m])=>`<li><a href="${s}" data-f="${s}">${m}</a></li>`).join("")}</ul></div>`;
+      $("#es").querySelectorAll("[data-f]").forEach(l=>l.onclick=e=>{e.preventDefault();$(l.dataset.f).focus();});
+      $("#esb").focus();return;}
+    p.state="COMPLETE";p.sync="PENDING";p.attempts=0;save();say("Plan complete. "+(S.net==="online"?"Sending now.":"It will send when you're back online."));go("#plans");kick();};
+}
+
+function summary(id){
+  const p=plan(id);if(!p||p.owner!==S.user)return go("#plans");
+  const a=act(p.act);
+  $("#main").innerHTML=`<p class="noprint"><a class="back" href="#plans">Back to my plans</a></p><h1>${esc(p.title)}</h1>
+  <p>${chip(p)}</p><p class="meta">${esc(a.name)} · ${esc(p.date||"date not set")} · ${p.steps.reduce((x,s)=>x+ +s.m,0)} minutes</p>
+  <h2>Steps</h2><ol>${p.steps.map(s=>`<li>${esc(s.t)} (${s.m} min)</li>`).join("")}</ol>
+  <h2>Prepare beforehand</h2><ul>${a.mat.map(m=>`<li>${m}</li>`).join("")}</ul>
+  <h2>Safety</h2><div class="notice warn"><span aria-hidden="true">⚠ </span>${esc(p.safety)||"<em>Not written yet.</em>"}</div>
+  <h2>Inclusion</h2><p>${esc(p.incl)||"<em>Not written yet.</em>"}</p>
+  <h2>Participation</h2><table><caption class="sr">Participation counts by group</caption><thead><tr><th scope="col" style="text-align:left">Group</th><th scope="col" style="text-align:right">Count</th></tr></thead><tbody>${CATS.map((c,i)=>`<tr><th scope="row" style="text-align:left;font-weight:400;padding-right:2rem">${c}</th><td style="text-align:right">${p.counts[i]}</td></tr>`).join("")}</tbody></table>
+  <div class="row noprint"><button class="btn sec" type="button" onclick="window.print()">Print on A4</button>
+  ${p.state==="COMPLETE"?`<button class="btn sec" id="reopen" type="button">Edit plan</button>`:`<a class="btn" href="#edit/${p.id}">Continue editing</a>`}</div>
+  ${p.state==="COMPLETE"?`<p class="hint">Editing a sent plan turns it back into a draft. You will need to mark it complete again.</p>`:""}`;
+  const r=$("#reopen");if(r)r.onclick=()=>{p.state="DRAFT";p.sync="NOT_QUEUED";save();go("#edit/"+p.id);};
+}
+
+function conflict(id){
+  const p=plan(id);if(!p||p.sync!=="CONFLICT")return go("#plans");
+  const s=p.server;
+  const diff=(k,lbl,f=v=>esc(v))=>{const ch=JSON.stringify(p[k])!==JSON.stringify(s[k]);return [`<p class="${ch?"changed":""}">${lbl}</p>`,f(p[k]),f(s[k])];};
+  const rows=[diff("date","Date"),diff("steps","Steps",v=>`<ol>${v.map(x=>`<li>${esc(x.t)} (${x.m} min)</li>`).join("")}</ol>`),diff("safety","Safety notes")];
+  $("#main").innerHTML=`<p><a class="back" href="#plans">Back to my plans</a></p><h1>Choose a version</h1>
+  <div class="notice good"><strong>Nothing has been overwritten.</strong> The outreach unit changed “${esc(p.title)}” after you last sent it. Pick which copy to keep.</div>
+  ${rows.map(([h,l,r])=>`${h}<div class="cols"><div class="ver"><h3>This phone</h3>${l}</div><div class="ver"><h3>Outreach unit</h3>${r}</div></div>`).join("")}
+  <div class="row"><button class="btn" id="kl" type="button">Keep this phone's version</button><button class="btn sec" id="ks" type="button">Use outreach unit copy</button><a class="btn sec" href="#plans">Decide later</a></div>
+  <p class="hint">Decide later keeps the plan usable on this phone; it just won't be sent yet.</p>`;
+  $("#kl").onclick=()=>{p.server=null;p.sync="PENDING";save();say("Keeping this phone's version. It will be sent again.");go("#plans");kick();};
+  $("#ks").onclick=()=>{Object.assign(p,{date:s.date,steps:s.steps,safety:s.safety});p.server=null;p.sync="SYNCHRONISED";p.syncedAt=now();save();say("Outreach unit copy kept. Plan synced.");go("#plans");};
+}
+
+/* ---------- sync engine (simulated) ---------- */
+let busy=false;
+function kick(){
+  if(busy||S.net!=="online"||!S.user)return;
+  const p=S.plans.find(x=>x.owner===S.user&&x.sync==="PENDING");if(!p)return;
+  busy=true;p.sync="SYNCING";save();refreshIfList();
+  setTimeout(()=>{busy=false;
+    if(S.net!=="online"){p.sync="PENDING";p.attempts++;save();say("Sync paused. It will retry when you're back online.");refreshIfList();return;}
+    if(S.fail.conflict){S.fail.conflict=false;p.sync="CONFLICT";p.server={date:p.date,steps:[...p.steps.slice(0,2),{t:"Hand out safety goggles before mixing",m:3},...p.steps.slice(2)],safety:p.safety+" Goggles required for all learners (added by outreach unit)."};save();say(p.title+": conflict. The outreach unit changed this plan. Nothing was overwritten.");refreshIfList();kick();return;}
+    if(S.fail.server>0){S.fail.server--;p.attempts++;
+      if(p.attempts>=3){p.sync="FAILED";S.fail.server=0;save();say("Couldn't send "+p.title+" after 3 tries.");refreshIfList();kick();return;}
+      p.sync="PENDING";save();refreshIfList();setTimeout(kick,900);return;}
+    p.sync="SYNCHRONISED";p.syncedAt=now();p.attempts=0;save();say(p.title+" synced.");refreshIfList();kick();
+  },1400);
+}
+function refreshIfList(){const r=location.hash.slice(1).split("/")[0];if(r==="plans"){const f=document.activeElement&&document.activeElement.id;plansView();renderChrome("plans");}else renderChrome(r);}
+
+/* ---------- test controls ---------- */
+document.querySelectorAll("[name=net]").forEach(r=>r.onchange=()=>{S.net=r.value;save();say(S.net==="online"?"Back online.":"You're offline. Saved work still works.");renderChrome(location.hash.slice(1).split("/")[0]);kick();});
+$("#f-download").onchange=e=>{S.fail.download=e.target.checked;save();};
+$("#f-server").onchange=e=>{S.fail.server=e.target.checked?3:0;save();};
+$("#f-conflict").onchange=e=>{S.fail.conflict=e.target.checked;save();};
+$("#reset").onclick=()=>{S=freshState();save();lastFilter={level:"",mins:"",topic:"",mat:[]};say("Demo data reset.");go("#signin");};
+$("#theme").onclick=()=>{const d=document.documentElement;const dark=d.dataset.theme==="dark"||(!d.dataset.theme&&matchMedia("(prefers-color-scheme: dark)").matches);d.dataset.theme=dark?"light":"dark";};
+
+render();kick();
+</script>
+</body>
+</html>

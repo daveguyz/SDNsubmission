@@ -1,0 +1,15 @@
+stateDiagram-v2
+  [*] --> NOT_QUEUED : new plan (Draft – not sent)
+  NOT_QUEUED --> PENDING : markComplete() valid
+  PENDING --> SYNCING : signal + runOnce()
+  SYNCING --> PENDING : no signal (attempt not counted)
+  SYNCING --> SYNCHRONISED : 200/201, baseRev = rev
+  SYNCING --> PENDING : 5xx, attempts < 3
+  SYNCING --> FAILED : 5xx, attempts = 3 / 4xx refused
+  SYNCING --> CONFLICT : 412 server copy changed
+  FAILED --> PENDING : Retry sending
+  CONFLICT --> PENDING : Keep this phone's version (re-base on server rev)
+  CONFLICT --> SYNCHRONISED : Use outreach unit copy
+  SYNCHRONISED --> NOT_QUEUED : Edit plan (reopen)
+  note right of PENDING : shown as "Waiting for signal"
+  note right of CONFLICT : shown as "Needs your choice"

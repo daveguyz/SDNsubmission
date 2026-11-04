@@ -1,0 +1,14 @@
+flowchart LR
+  subgraph D1["«device» Shared Android phone (≥ 2 GB RAM, Chrome/WebView)"]
+    B["«execution env» Browser<br/>STEMMate web app + service worker<br/>cache ≈ 120 KB"]
+  end
+  subgraph D2["«device» Outreach-unit office PC or low-cost VPS"]
+    N["«execution env» Node.js 20 LTS<br/>server.js (port 8080)<br/>plans.json + nightly backup"]
+    R["«reverse proxy» Caddy<br/>TLS 1.3, automatic certificates"]
+  end
+  subgraph D3["«device» Outreach staff laptop"]
+    E["Text editor / spreadsheet<br/>edits catalogue.json"]
+  end
+  B -- "HTTPS 443, only when signal" --> R
+  R -- "HTTP localhost:8080" --> N
+  E -- "copy file + restart (no code change)" --> N
